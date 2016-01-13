@@ -6,7 +6,7 @@
 - ( ) RX input (FrSky RX)
 - ( ) Auto Balancing
 - ( ) Bluetooth Module
-- (X) Telemetry Data Protocol
+- (x) Telemetry Data Protocol
 
 ### Java Telemetry Program
 - ( ) Bluetooth
