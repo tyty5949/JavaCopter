@@ -1,6 +1,6 @@
 # JavaCopter
 
-Arduino Quadcopter Firmware
+### Arduino Quadcopter Firmware
 - Gyro (MPU6050)
 - Motors (Adafruit Shield)
 - RX input (FrSky RX)
@@ -8,7 +8,7 @@ Arduino Quadcopter Firmware
 - Bluetooth Module
 - Telemetry Data Protocol
 
-Java Telemetry Program
+### Java Telemetry Program
 - Bluetooth
 - Arduino Serial Input
 - Telemetry Data Protocol
