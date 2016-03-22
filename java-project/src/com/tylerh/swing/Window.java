@@ -33,7 +33,7 @@ public class Window implements Runnable {
         frame.setVisible(true);
     }
 
-    public class WindowPanel extends JPanel {
+    private class WindowPanel extends JPanel {
 
         private int tempPitch;
         private int tempYaw;
@@ -46,7 +46,7 @@ public class Window implements Runnable {
         private JLabel pitchLabel;
         private JLabel yawLabel;
 
-        public WindowPanel() {
+        WindowPanel() {
             //setBackground(Color.WHITE);
             setLayout(null);
 
