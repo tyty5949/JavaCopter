@@ -5,6 +5,7 @@ import com.swinggl.elements.GLFrame;
 import com.swinggl.elements.GLPanel;
 import com.swinggl.util.RenderUtil;
 import com.swinggl.util.SpriteSheet;
+import com.tylerh.GLU;
 import com.tylerh.Main;
 import org.lwjgl.glfw.GLFWWindowCloseCallback;
 import org.lwjgl.opengl.GL11;
@@ -36,6 +37,30 @@ public class Window implements Runnable {
     @Override
     public void run() {
         frame.run();
+    }
+
+    private void switchTo3D() {
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glShadeModel(GL11.GL_SMOOTH);
+        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        GL11.glClearDepth(1.0);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
+
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity(); // Reset The Projection Matrix
+        GLU.gluPerspective(45.0f, (frame.getSize()[0] / frame.getSize()[1]), 0.1f, 100.0f); // Calculate The Aspect Ratio Of The Window
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glLoadIdentity();
+        GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_NICEST);
+    }
+
+    private void switchTo2D() {
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0.0f, frame.getSize()[0], frame.getSize()[1], 0.0f, 0.0f, 1.0f);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glLoadIdentity();
     }
 
     private class WindowPanel extends GLPanel {
@@ -72,13 +97,17 @@ public class Window implements Runnable {
             RenderUtil.drawImmediateTexture(0f, 0f, 600f, 600f, backgroundCoords);
             GL11.glEnd();
             RenderUtil.disableTransparency();
+
+            switchTo3D();
+            //3D models
+
+
+            switchTo2D();
         }
 
         @Override
         public void dispose() {
 
         }
-
-
     }
 }
