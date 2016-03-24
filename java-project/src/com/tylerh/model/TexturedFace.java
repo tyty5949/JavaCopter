@@ -1,6 +1,6 @@
-package com.blockydigital.engine.model;
+package com.tylerh.model;
 
-import org.lwjgl.util.vector.Vector3f;
+import org.joml.Vector3f;
 
 public class TexturedFace {
 	

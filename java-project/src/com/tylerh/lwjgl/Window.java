@@ -5,8 +5,10 @@ import com.swinggl.elements.GLFrame;
 import com.swinggl.elements.GLPanel;
 import com.swinggl.util.RenderUtil;
 import com.swinggl.util.SpriteSheet;
+import com.tylerh.Camera;
 import com.tylerh.GLU;
 import com.tylerh.Main;
+import com.tylerh.model.TexturedOBJModel;
 import org.lwjgl.glfw.GLFWWindowCloseCallback;
 import org.lwjgl.opengl.GL11;
 
@@ -73,12 +75,25 @@ public class Window implements Runnable {
         private float[] backgroundCoords;
         private float[] horizonCoords;
 
+        private Camera camera;
+
+        private Texture baseTexture;
+        private TexturedOBJModel groundModel;
+        private TexturedOBJModel copterModel;
+
         @Override
         public void init(GLFrame frame) {
             spritesheet = new Texture("res/spritesheet.png");
-            backgroundCoords = SpriteSheet.getRectCoords(0, 0, 600, 600, spritesheet);
+            baseTexture = new Texture("res/base_texture.png");
 
+            backgroundCoords = SpriteSheet.getRectCoords(0, 0, 600, 600, spritesheet);
             horizonCoords = SpriteSheet.getRectCoords(600, 0, 300, 600, spritesheet);
+
+            groundModel = new TexturedOBJModel("res/ground_model.obj");
+            //copterModel = new TexturedOBJModel("res/copter_model.obj");
+
+            camera = new Camera(0f, -3f, -7f);
+            camera.setPitch(20f);
 
             this.initialized = true;
         }
@@ -90,6 +105,18 @@ public class Window implements Runnable {
 
         @Override
         public void render(GLFrame frame, float delta) {
+            switchTo3D();
+            GL11.glPushMatrix();
+            camera.lookThrough();
+            GL11.glColor3f(1.0f, 1.0f, 1.0f);
+            baseTexture.bind();
+
+            groundModel.render();
+            //copterModel.render();
+
+            GL11.glPopMatrix();
+            switchTo2D();
+
             RenderUtil.enableTransparency();
             spritesheet.bind();
             GL11.glColor3f(1f, 1f, 1f);
@@ -97,12 +124,6 @@ public class Window implements Runnable {
             RenderUtil.drawImmediateTexture(0f, 0f, 600f, 600f, backgroundCoords);
             GL11.glEnd();
             RenderUtil.disableTransparency();
-
-            switchTo3D();
-            //3D models
-
-
-            switchTo2D();
         }
 
         @Override

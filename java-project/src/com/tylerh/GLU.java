@@ -14,7 +14,7 @@ import java.nio.FloatBuffer;
 
 public class GLU {
 
-    private final float PI = (float) Math.PI;
+    private static final float PI = (float) Math.PI;
     private static final float[] IDENTITY_MATRIX =
             new float[]{
                     1.0f, 0.0f, 0.0f, 0.0f,

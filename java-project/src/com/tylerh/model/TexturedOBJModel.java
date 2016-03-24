@@ -1,4 +1,4 @@
-package com.blockydigital.engine.model;
+package com.tylerh.model;
 
 import static org.lwjgl.opengl.GL11.GL_COMPILE;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
@@ -17,10 +17,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.lwjgl.util.vector.Vector2f;
-import org.lwjgl.util.vector.Vector3f;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 
-import com.blockydigital.engine.util.OBJLoader;
+import com.tylerh.model.OBJLoader;
 
 public class TexturedOBJModel {
 
