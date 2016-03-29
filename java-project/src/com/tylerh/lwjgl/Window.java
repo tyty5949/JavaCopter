@@ -3,6 +3,7 @@ package com.tylerh.lwjgl;
 import com.swinggl.backend.Texture;
 import com.swinggl.elements.GLFrame;
 import com.swinggl.elements.GLPanel;
+import com.swinggl.util.GLColor;
 import com.swinggl.util.RenderUtil;
 import com.swinggl.util.SpriteSheet;
 import com.tylerh.Camera;
@@ -22,11 +23,16 @@ public class Window implements Runnable {
 
     private GLFrame frame;
 
+    private static float gyroRoll = 0f;
+    private static float gyroPitch = 0f;
+    private static float gyroYaw = 0f;
+
     public Window() {
         frame = new GLFrame(false);
         frame.setSize(600, 600);
         frame.setPosition((int) (Main.screenWidth / 2) - 410, (int) (Main.screenHeight / 2) - 300);
         frame.setTitle("Info");
+        frame.setBackgroundColor(GLColor.BLACK);
         frame.setPanel(new WindowPanel());
         frame.setWindowCloseCallback(new GLFWWindowCloseCallback() {
             @Override
@@ -42,7 +48,6 @@ public class Window implements Runnable {
     }
 
     private void switchTo3D() {
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         GL11.glClearDepth(1.0);
@@ -58,6 +63,7 @@ public class Window implements Runnable {
     }
 
     private void switchTo2D() {
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
         GL11.glOrtho(0.0f, frame.getSize()[0], frame.getSize()[1], 0.0f, 0.0f, 1.0f);
@@ -65,11 +71,15 @@ public class Window implements Runnable {
         GL11.glLoadIdentity();
     }
 
-    private class WindowPanel extends GLPanel {
+    public static void setRoll(float roll) {
+        gyroRoll = roll;
+    }
 
-        private float gyroRoll;
-        private float gyroPitch;
-        private float gyroYaw;
+    public static void setPitch(float pitch) {
+        gyroPitch = pitch;
+    }
+
+    private class WindowPanel extends GLPanel {
 
         private Texture spritesheet;
         private float[] backgroundCoords;
@@ -92,8 +102,8 @@ public class Window implements Runnable {
             groundModel = new TexturedOBJModel("res/ground_model.obj");
             //copterModel = new TexturedOBJModel("res/copter_model.obj");
 
-            camera = new Camera(0f, -3f, -7f);
-            camera.setPitch(20f);
+            camera = new Camera(0f, -2f, -6f);
+            camera.setPitch(5f);
 
             this.initialized = true;
         }
@@ -116,6 +126,31 @@ public class Window implements Runnable {
 
             GL11.glPopMatrix();
             switchTo2D();
+
+            GL11.glDisable(GL11.GL_TEXTURE_2D);
+
+            GL11.glColor4f(.2039f, .3647f, .2039f, 1f);
+            GL11.glBegin(GL11.GL_QUADS);
+            GL11.glVertex2f(0f, 0f);
+            GL11.glVertex2f(240f, 0f);
+            GL11.glVertex2f(240f, 240f);
+            GL11.glVertex2f(0f, 240f);
+            GL11.glEnd();
+
+            GL11.glPushMatrix();
+            GL11.glTranslatef(138f, 138f + gyroPitch, 0f);
+            GL11.glRotatef(gyroRoll, 0f, 0f, 1f);
+            GL11.glTranslatef(-150f, -240f, 0f);
+            GL11.glColor4f(.4078f, .5333f, .7882f, 1f);
+            GL11.glBegin(GL11.GL_QUADS);
+            GL11.glVertex2f(0f, 0f);
+            GL11.glVertex2f(300f, 0f);
+            GL11.glVertex2f(300f, 240f);
+            GL11.glVertex2f(0f, 240f);
+            GL11.glEnd();
+            GL11.glPopMatrix();
+
+            GL11.glEnable(GL11.GL_TEXTURE_2D);
 
             RenderUtil.enableTransparency();
             spritesheet.bind();
