@@ -1,5 +1,7 @@
 package com.tylerh;
 
+import com.tylerh.bluetooth.Bluetooth;
+
 import java.awt.*;
 
 /**
@@ -19,6 +21,6 @@ public class Main {
         screenHeight = screenSize.getHeight();
         new Thread(new com.tylerh.lwjgl.Window(), "LWJGL Window").start();
         new Thread(new com.tylerh.swing.Window(), "Swing Window").start();
-        new Bluetooth().begin();
+        new Bluetooth().run();
     }
 }

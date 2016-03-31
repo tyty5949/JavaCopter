@@ -1,4 +1,4 @@
-package com.tylerh;
+package com.tylerh.bluetooth;
 
 /**
  * Created by tsh5949 on 3/8/2016.
@@ -6,13 +6,14 @@ package com.tylerh;
  *
  * Description:
  */
-public class Bluetooth {
+public class Bluetooth implements Runnable{
 
     public Bluetooth() {
 
     }
 
-    public void begin() {
+    @Override
+    public void run() {
 
     }
 }
