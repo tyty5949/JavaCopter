@@ -151,10 +151,8 @@ public class GLFrame {
         this.fullscreen = fullscreen;
         this.secondWindowHandle = secondWindowHandle;
         glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
-
         if (glfwInit() != GL11.GL_TRUE)
             throw new IllegalStateException("Unable to initialize GLFW");
-
         // Configure our window
         glfwDefaultWindowHints();
         glfwWindowHint(GLFW_VISIBLE, GL_FALSE);

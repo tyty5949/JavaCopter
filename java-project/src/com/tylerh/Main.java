@@ -1,6 +1,8 @@
 package com.tylerh;
 
 import com.tylerh.bluetooth.Bluetooth;
+import com.tylerh.lwjgl.*;
+import com.tylerh.lwjgl.Window;
 
 import java.awt.*;
 
@@ -16,11 +18,11 @@ public class Main {
     public static double screenHeight;
 
     public static void main(String[] args) {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        screenWidth = screenSize.getWidth();
-        screenHeight = screenSize.getHeight();
-        new Thread(new com.tylerh.lwjgl.Window(), "LWJGL Window").start();
-        new Thread(new com.tylerh.swing.Window(), "Swing Window").start();
-        new Bluetooth().run();
+        //Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        screenWidth = 1280;
+        screenHeight = 800;
+        new Thread(new Bluetooth(), "Bluetooth").start();
+        com.tylerh.lwjgl.Window window = new Window();
+        window.run();
     }
 }

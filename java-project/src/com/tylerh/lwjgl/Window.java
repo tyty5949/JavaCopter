@@ -29,6 +29,7 @@ public class Window implements Runnable {
 
     public Window() {
         frame = new GLFrame(false);
+        System.out.println("Made it");
         frame.setSize(600, 600);
         frame.setPosition((int) (Main.screenWidth / 2) - 410, (int) (Main.screenHeight / 2) - 300);
         frame.setTitle("Info");
@@ -91,6 +92,8 @@ public class Window implements Runnable {
         private TexturedOBJModel groundModel;
         private TexturedOBJModel copterModel;
 
+        boolean firstUpdate;
+
         @Override
         public void init(GLFrame frame) {
             spritesheet = new Texture("res/spritesheet.png");
@@ -110,7 +113,10 @@ public class Window implements Runnable {
 
         @Override
         public void update(GLFrame frame, float delta) {
-
+            if(!firstUpdate) {
+                new Thread(new com.tylerh.swing.Window(), "Swing Window").start();
+                firstUpdate = true;
+            }
         }
 
         @Override
