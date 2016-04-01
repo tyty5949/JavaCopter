@@ -5,16 +5,26 @@ import com.tylerh.Main;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 /**
  * Created by tsh5949 on 3/8/2016.
  * Last edited on Mar 08, 2016 by tsh5949.
- *
+ * <p/>
  * Description:
  */
 public class Window implements Runnable {
 
     private JFrame frame;
+
+    private static JSlider throttle;
+    private static JSlider pitch;
+    private static JSlider roll;
+    private static JSlider yaw;
+
+    private static JLabel pitchVal;
+    private static JLabel rollVal;
 
     public Window() {
 
@@ -28,6 +38,22 @@ public class Window implements Runnable {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(new WindowPanel());
         frame.setVisible(true);
+
+        while (true) {
+            //if(Bluetooth.ready)
+            //Bluetooth.transmit("[c" + String.format("%03d", throttle.getValue()) + String.format("%03d", roll.getValue() + 50) +
+            //String.format("%03d", pitch.getValue() + 50) + String.format("%03d", yaw.getValue() + 50) + "]");
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void setGyroData(double p, double r) {
+        pitchVal.setText("Pitch: " + p + "°");
+        rollVal.setText("Roll: " + r + "°");
     }
 
     private class WindowPanel extends JPanel {
@@ -35,11 +61,6 @@ public class Window implements Runnable {
         private int tempPitch;
         private int tempRoll;
         private int tempYaw;
-
-        private JSlider throttle;
-        private JSlider pitch;
-        private JSlider roll;
-        private JSlider yaw;
 
         private JLabel throttleLabel;
         private JLabel pitchLabel;
@@ -50,12 +71,13 @@ public class Window implements Runnable {
             //setBackground(Color.WHITE);
             setLayout(null);
 
+            addMouseListener(new Mouse());
+
             throttle = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
             throttle.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
                     JSlider source = (JSlider) e.getSource();
-                    System.out.println(source.getValue());
                 }
             });
             throttle.setMajorTickSpacing(20);
@@ -136,6 +158,44 @@ public class Window implements Runnable {
             yawLabel = new JLabel("Yaw");
             yawLabel.setBounds(77, 210, 100, 20);
             add(yawLabel);
+
+            pitchVal = new JLabel("Pitch: NULL°");
+            pitchVal.setBounds(10, 400, 100, 20);
+            add(pitchVal);
+
+            rollVal = new JLabel("Roll: NULL°");
+            rollVal.setBounds(10, 430, 100, 20);
+            add(rollVal);
+        }
+    }
+
+    private class Mouse implements MouseListener {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            yaw.setValue(0);
+            roll.setValue(0);
+            pitch.setValue(0);
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+
         }
     }
 }

@@ -22,6 +22,7 @@ public class Main {
         screenWidth = 1280;
         screenHeight = 800;
         new Thread(new Bluetooth(), "Bluetooth").start();
+        new Thread(new com.tylerh.swing.Window(), "Swing Window").start();
         //com.tylerh.lwjgl.Window window = new Window();
         //window.run();
     }

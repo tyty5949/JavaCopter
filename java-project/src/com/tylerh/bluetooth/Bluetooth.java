@@ -1,19 +1,27 @@
 package com.tylerh.bluetooth;
 
-import jssc.*;
+import com.tylerh.swing.Window;
+import jssc.SerialPort;
+import jssc.SerialPortException;
 
 /**
  * Created by tsh5949 on 3/8/2016.
  * Last edited on Mar 08, 2016 by tsh5949.
- *
+ * <p/>
  * Description:
  */
-public class Bluetooth implements Runnable{
+public class Bluetooth implements Runnable {
 
     private static SerialPort serialPort;
 
+    private static String transmitPacket = "";
+
+    private static double gyroData[] = new double[3];
+
+    public static boolean ready = false;
+
     public Bluetooth() {
-        serialPort = new SerialPort("/dev/tty.");
+        serialPort = new SerialPort("/dev/tty.HC-06-DevB");
     }
 
     @Override
@@ -21,52 +29,74 @@ public class Bluetooth implements Runnable{
         try {
             serialPort.openPort();
             serialPort.setParams(9600, 8, 1, 0);
-            //Preparing a mask. In a mask, we need to specify the types of events that we want to track.
-            //Well, for example, we need to know what came some data, thus in the mask must have the
-            //following value: MASK_RXCHAR. If we, for example, still need to know about changes in states
-            //of lines CTS and DSR, the mask has to look like this: SerialPort.MASK_RXCHAR + SerialPort.MASK_CTS + SerialPort.MASK_DSR
-            int mask = SerialPort.MASK_RXCHAR;
-            //Set the prepared mask
-            serialPort.setEventsMask(mask);
-            //Add an interface through which we will receive information about events
-            serialPort.addEventListener(new SerialPortReader());
-        }
-        catch (SerialPortException ex) {
+
+            // SerialPortReader
+            new Thread(new SerialPortReader(), "SerialPortReader").start();
+
+            System.out.println("Opened reader, sending connection packet");
+            serialPort.writeBytes("[conn]".getBytes());
+            System.out.println("sent connection packet");
+            ready = true;
+
+            // Transmit control packets
+            while (true) {
+                if (!transmitPacket.equals("")) {
+                    //serialPort.writeBytes(transmitPacket.getBytes());
+                    transmitPacket = "";
+                }
+
+                Thread.sleep(5);
+            }
+        } catch (SerialPortException | InterruptedException ex) {
             ex.printStackTrace();
         }
     }
 
-    static class SerialPortReader implements SerialPortEventListener {
+    public static void transmit(String transmitPacket) {
+        Bluetooth.transmitPacket = transmitPacket;
+    }
 
-        public void serialEvent(SerialPortEvent event) {
-            //Object type SerialPortEvent carries information about which event occurred and a value.
-            //For example, if the data came a method event.getEventValue() returns us the number of bytes in the input buffer.
-            if(event.isRXCHAR()){
-                if(event.getEventValue() == 10){
-                    try {
-                        byte buffer[] = serialPort.readBytes(10);
+    public static double[] getGyroData() {
+        return gyroData;
+    }
+
+    static class SerialPortReader implements Runnable {
+
+        private String receivePacket = "";
+
+        @Override
+        public void run() {
+            try {
+                byte buffer[];
+                while (true) {
+                    buffer = serialPort.readBytes(1);
+                    System.out.print((char) buffer[0]);
+                    receivePacket += (char) buffer[0];
+                    //System.out.println(receivePacket);
+                    if (receivePacket.contains("[") && receivePacket.contains("]")) {
+                        //System.out.println(receivePacket);
+                        if (receivePacket.contains("[d")) {
+                            String[] gyData = receivePacket.split(";");
+                            gyData[0] = gyData[0].substring(gyData[0].indexOf("[d") + 2, gyData[0].length());
+                            gyData[2] = gyData[2].substring(0, gyData[2].length() - 1);
+                            //System.out.println("X: " + gyData[0]);
+                            //System.out.println("Y: " + gyData[1]);
+                            //System.out.println("Z: " + gyData[2] + "\n");
+                            if (!gyData[0].contains("INF") && !gyData[1].contains("INF") && !gyData[2].contains("INF")) {
+                                gyroData = new double[]{
+                                        Double.parseDouble(gyData[0]),
+                                        Double.parseDouble(gyData[1]),
+                                        Double.parseDouble(gyData[2])};
+                                Window.setGyroData(Double.parseDouble(gyData[1]), Double.parseDouble(gyData[2]));
+                            }
+                        } else if (receivePacket.contains("[i")) {
+                            System.out.println(receivePacket.substring(receivePacket.indexOf("[i") + 2, receivePacket.length() - 1));
+                        }
+                        receivePacket = "";
                     }
-                    catch (SerialPortException ex) {
-                        ex.printStackTrace();
-                    }
                 }
-            }
-            //If the CTS line status has changed, then the method event.getEventValue() returns 1 if the line is ON and 0 if it is OFF.
-            else if(event.isCTS()){
-                if(event.getEventValue() == 1){
-                    System.out.println("CTS - ON");
-                }
-                else {
-                    System.out.println("CTS - OFF");
-                }
-            }
-            else if(event.isDSR()){
-                if(event.getEventValue() == 1){
-                    System.out.println("DSR - ON");
-                }
-                else {
-                    System.out.println("DSR - OFF");
-                }
+            } catch (SerialPortException e) {
+                e.printStackTrace();
             }
         }
     }

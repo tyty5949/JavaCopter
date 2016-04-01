@@ -9,6 +9,7 @@ import com.swinggl.util.SpriteSheet;
 import com.tylerh.Camera;
 import com.tylerh.GLU;
 import com.tylerh.Main;
+import com.tylerh.bluetooth.Bluetooth;
 import com.tylerh.model.TexturedOBJModel;
 import org.lwjgl.glfw.GLFWWindowCloseCallback;
 import org.lwjgl.opengl.GL11;
@@ -29,7 +30,6 @@ public class Window implements Runnable {
 
     public Window() {
         frame = new GLFrame(false);
-        System.out.println("Made it");
         frame.setSize(600, 600);
         frame.setPosition((int) (Main.screenWidth / 2) - 410, (int) (Main.screenHeight / 2) - 300);
         frame.setTitle("Info");
@@ -114,7 +114,7 @@ public class Window implements Runnable {
         @Override
         public void update(GLFrame frame, float delta) {
             if(!firstUpdate) {
-                new Thread(new com.tylerh.swing.Window(), "Swing Window").start();
+                //new Thread(new com.tylerh.swing.Window(), "Swing Window").start();
                 firstUpdate = true;
             }
         }
@@ -144,8 +144,8 @@ public class Window implements Runnable {
             GL11.glEnd();
 
             GL11.glPushMatrix();
-            GL11.glTranslatef(138f, 138f + gyroPitch, 0f);
-            GL11.glRotatef(gyroRoll, 0f, 0f, 1f);
+            GL11.glTranslated(138f, 138f + Bluetooth.getGyroData()[2], 0f);
+            GL11.glRotated(Bluetooth.getGyroData()[1], 0f, 0f, 1f);
             GL11.glTranslatef(-150f, -240f, 0f);
             GL11.glColor4f(.4078f, .5333f, .7882f, 1f);
             GL11.glBegin(GL11.GL_QUADS);
