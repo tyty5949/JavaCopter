@@ -1,6 +1,7 @@
 package com.tylerh.swing;
 
 import com.tylerh.Main;
+import com.tylerh.bluetooth.Bluetooth;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -40,9 +41,10 @@ public class Window implements Runnable {
         frame.setVisible(true);
 
         while (true) {
-            //if(Bluetooth.ready)
-            //Bluetooth.transmit("[c" + String.format("%03d", throttle.getValue()) + String.format("%03d", roll.getValue() + 50) +
-            //String.format("%03d", pitch.getValue() + 50) + String.format("%03d", yaw.getValue() + 50) + "]");
+                if(Bluetooth.ready) {
+                    Bluetooth.transmit("[c" + String.format("%03d", throttle.getValue()) + String.format("%03d", roll.getValue() + 50) +
+                            String.format("%03d", pitch.getValue() + 50) + String.format("%03d", yaw.getValue() + 50) + "]");
+                }
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {
@@ -73,15 +75,15 @@ public class Window implements Runnable {
 
             addMouseListener(new Mouse());
 
-            throttle = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);
+            throttle = new JSlider(JSlider.HORIZONTAL, 0, 10, 0);
             throttle.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
                     JSlider source = (JSlider) e.getSource();
                 }
             });
-            throttle.setMajorTickSpacing(20);
-            throttle.setMinorTickSpacing(10);
+            throttle.setMajorTickSpacing(2);
+            throttle.setMinorTickSpacing(1);
             throttle.setPaintTicks(true);
             throttle.setPaintLabels(true);
             throttle.setBounds(10, 20, 160, 50);
