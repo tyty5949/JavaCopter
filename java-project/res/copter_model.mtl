@@ -1,0 +1,111 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+
+newmtl Texture
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture.png
+
+newmtl Texture1_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture1_.png
+
+newmtl Texture2_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture2_.png
+
+newmtl Texture3_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture3_.png
+
+newmtl Texture4_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture4_.png
+
+newmtl Texture5_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture5_.png
+
+newmtl Texture6_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture6_.png
+
+newmtl Texture7_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture7_.png
+
+newmtl Texture8_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture8_.png
+
+newmtl Texture9_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture9_.png
+
+newmtl Texture10_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture10_.png
+
+newmtl Texture11_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture11_.png
+
+newmtl Texture12_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture12_.png
+
+newmtl Texture13_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture13_.png
+
+newmtl Texture14_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture14_.png
+
+newmtl Texture15_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture15_.png
+
+newmtl Texture16_
+Ka 0.000000 0.000000 0.000000
+Kd 0.635294 0.545098 0.607843
+Ks 0.330000 0.330000 0.330000
+map_Kd copter_model/Texture16_.png
+
+newmtl FrontColor
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.330000 0.330000 0.330000
+

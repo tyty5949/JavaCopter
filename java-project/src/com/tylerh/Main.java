@@ -27,9 +27,9 @@ public class Main {
         screenHeight = 800;
         //new Thread(new Bluetooth(), "Bluetooth").start();
         //new Thread(new com.tylerh.swing.Window(), "Swing Window").start();
-        runClient();
-        //com.tylerh.lwjgl.Window window = new Window();
-        //window.run();
+        new Thread("Network") { public void run() { runClient(); }}.start();
+        com.tylerh.lwjgl.Window window = new Window();
+        window.run();
         //runServer();
     }
 
@@ -43,7 +43,10 @@ public class Main {
         client.openConnection();
         while(true) {
             String s = client.receive();
-            System.out.println(s);
+
+            if (s.startsWith("/dp/")) {
+                Window.decodePacket(s);
+            }
         }
     }
 

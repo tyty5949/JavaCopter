@@ -300,7 +300,7 @@ public class Server implements Runnable {
         } else if (data.startsWith("/p/")) {
             clientResponse.add(Integer.parseInt(data.split("/p/|/e/")[1]));
         } else if (data.startsWith("/dp/")) {
-            sendToAll(data.substring(4, data.length() - 3).getBytes());
+            sendToAll(data.substring(0, data.length() - 3).getBytes());
         } else {
             System.out.println(packet.getAddress() + ":" + packet.getPort() + " sent an unknown packet: " + data);
         }

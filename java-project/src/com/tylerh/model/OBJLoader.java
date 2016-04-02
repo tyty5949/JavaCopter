@@ -65,7 +65,8 @@ public class OBJLoader {
 				model.addTexVerticies(new Vector2f(x, y));
 			} else if (line.startsWith("f ")) {
 				Vector3f vertexIndices = new Vector3f(Float.valueOf(line.split(" ")[1].split("/")[0]), Float.valueOf(line.split(" ")[2].split("/")[0]), Float.valueOf(line.split(" ")[3].split("/")[0]));
-				Vector3f textureIndicies = new Vector3f(Float.valueOf(line.split(" ")[1].split("/")[1]), Float.valueOf(line.split(" ")[2].split("/")[1]), Float.valueOf(line.split(" ")[3].split("/")[1]));
+				Vector3f textureIndicies = new Vector3f(Float.valueOf(line.split(" ")[1].split("/")[1]), Float.valueOf(line.split(" ")[2].split("/")[1]),
+						Float.valueOf(line.split(" ")[3].split("/")[1]));
 				Vector3f vertexNormals = new Vector3f(Float.valueOf(line.split(" ")[1].split("/")[2]), Float.valueOf(line.split(" ")[2].split("/")[2]), Float.valueOf(line.split(" ")[3].split("/")[2]));
 				model.addFaces(vertexIndices, textureIndicies, vertexNormals);
 			}

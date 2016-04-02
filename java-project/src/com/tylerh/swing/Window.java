@@ -41,7 +41,7 @@ public class Window implements Runnable {
         frame.setVisible(true);
 
         while (true) {
-                if(Bluetooth.ready) {
+                if(Bluetooth.isReady()) {
                     Bluetooth.transmit("[c" + String.format("%03d", throttle.getValue()) + String.format("%03d", roll.getValue() + 50) +
                             String.format("%03d", pitch.getValue() + 50) + String.format("%03d", yaw.getValue() + 50) + "]");
                 }

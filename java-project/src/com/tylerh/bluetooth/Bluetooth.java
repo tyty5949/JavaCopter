@@ -1,44 +1,38 @@
 package com.tylerh.bluetooth;
 
+import com.tylerh.Main;
 import com.tylerh.swing.Window;
 import jssc.SerialPort;
 import jssc.SerialPortException;
 
-import java.util.Arrays;
-
-/**
- * Created by tsh5949 on 3/8/2016.
- * Last edited on Mar 08, 2016 by tsh5949.
- * <p/>
- * Description:
- */
 public class Bluetooth implements Runnable {
 
+    // The SerialPort object that does the communication with the bluetooth port
     private static SerialPort serialPort;
 
+    // The packet that is being transmitted to the arduino
     private static String transmitPacket = "";
 
-    private static double gyroData[] = new double[3];
-    private static int motorData[] = new int[4];
-
-    public static boolean ready = false;
-    public static boolean readyToSend = true;
-
-    private int timer = 0;
+    // Becomes true after the arduino finished initializing
+    private static boolean ready = false;
 
     public Bluetooth() {
-        serialPort = new SerialPort("/dev/tty.HC-06-DevB");
+        serialPort = new SerialPort("/dev/tty.HC-06-DevB");     // The port of the arduino bluetooth serial on the mac
     }
 
-    @Override
+    /**
+     * The writer is on a different thread so that serial transmitting and receiving can be done at the same time.
+     */
     public void run() {
         try {
+            // Open the Serial Port
             serialPort.openPort();
             serialPort.setParams(9600, 8, 1, 0);
 
-            // SerialPortReader
+            // Start the SerialPortReader
             new Thread(new SerialPortReader(), "SerialPortReader").start();
 
+            // Sends the initial connection packets
             serialPort.writeBytes("[conn]".getBytes());
             serialPort.writeBytes("[conn]".getBytes());
             serialPort.writeBytes("[conn]".getBytes());
@@ -55,23 +49,18 @@ public class Bluetooth implements Runnable {
         }
     }
 
-    public static void stop() {
-        try {
-            serialPort.closePort();
-        } catch (SerialPortException e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void transmit(String transmitPacket) {
         Bluetooth.transmitPacket = transmitPacket;
     }
 
-    public static double[] getGyroData() {
-        return gyroData;
+    public static boolean isReady() {
+        return ready;
     }
-    public static int[] getMotorData() { return motorData; }
 
+    /**
+     * The reader is on a different thread so that serial transmitting and receiving can be done at the same time.
+     */
     static class SerialPortReader implements Runnable {
 
         private String receivePacket = "";
@@ -81,33 +70,29 @@ public class Bluetooth implements Runnable {
             try {
                 byte buffer[];
                 while (true) {
+                    // When a byte arrives in the serial, it is read into a buffer
                     buffer = serialPort.readBytes(1);
-                    System.out.print((char) buffer[0]);
                     receivePacket += (char) buffer[0];
-                    //System.out.println(receivePacket);
+
+                    // If a complete packet has arrived
                     if (receivePacket.contains("[") && receivePacket.contains("]")) {
-                        //System.out.println(receivePacket);
+                        // If the received packet is a data packet
                         if (receivePacket.contains("[d")) {
                             String[] gyData = receivePacket.substring(receivePacket.indexOf("[d"), receivePacket.length()).split(";");
-                            gyData[0] = gyData[0].substring(gyData[0].indexOf("[d") + 2, gyData[0].length());
-                            gyData[6] = gyData[6].substring(0, gyData[6].length() - 1);
-
-                            gyroData = new double[]{
-                                    Double.parseDouble(gyData[0]),
-                                    Double.parseDouble(gyData[1]),
-                                    Double.parseDouble(gyData[2])};
-                            motorData = new int[]{
-                                    Integer.parseInt(gyData[3]),
-                                    Integer.parseInt(gyData[4]),
-                                    Integer.parseInt(gyData[5]),
-                                    Integer.parseInt(gyData[6])};
-                            System.out.println(Arrays.toString(gyroData));
                             Window.setGyroData(Double.parseDouble(gyData[1]), Double.parseDouble(gyData[2]));
-                        } else if (receivePacket.contains("[i")) {
-                            //System.out.println(receivePacket.substring(receivePacket.indexOf("[i") + 2, receivePacket.length() - 1));
+                            Main.sendPacket(("/dp/" + receivePacket + transmitPacket + "/e/").getBytes());
+                        }
+
+                        // If the received packet is a information packet
+                        if (receivePacket.contains("[i")) {
+                            System.out.println(receivePacket.substring(receivePacket.indexOf("[i") + 2, receivePacket.length() - 1));
+
+                            // If the arduino has finished initializing, the quadcopter is now open to control packets
                             if (receivePacket.contains("DONE"))
                                 ready = true;
                         }
+
+                        // Clear the packet once it has been read
                         receivePacket = "";
                     }
                 }
