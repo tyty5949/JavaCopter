@@ -1,6 +1,6 @@
-package com.blockydigital.engine.network;
+package com.tylerh.network;
 
-import com.blockydigital.engine.util.UniqueIdentifier;
+import com.tylerh.util.UniqueIdentifier;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -299,6 +299,8 @@ public class Server implements Runnable {
             send(decodedData.getBytes(), targetClient.getAddress(), targetClient.getPort());
         } else if (data.startsWith("/p/")) {
             clientResponse.add(Integer.parseInt(data.split("/p/|/e/")[1]));
+        } else if (data.startsWith("/dp/")) {
+            sendToAll(data.substring(4, data.length() - 3).getBytes());
         } else {
             System.out.println(packet.getAddress() + ":" + packet.getPort() + " sent an unknown packet: " + data);
         }

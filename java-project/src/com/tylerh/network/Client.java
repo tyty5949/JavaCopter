@@ -1,4 +1,4 @@
-package com.blockydigital.engine.network;
+package com.tylerh.network;
 
 import java.io.IOException;
 import java.net.*;
